@@ -57,20 +57,14 @@ class LeanError:
     error: str
 
 
-@dataclass(frozen=True)
-class TimeoutError:
-    error: str
-
-
 TacticResult = Union[
     TacticState,
     ProofFinished,
     LeanError,
-    TimeoutError,
     ProofGivenUp,
 ]
 
-CommandResult = Union[CommandState, LeanError, TimeoutError]
+CommandResult = Union[CommandState, LeanError]
 
 State = Union[CommandState, TacticState]
 
@@ -398,7 +392,7 @@ class Dojo:
         if exit_code == 137:
             raise DojoCrashError("OOM")
         else:
-            raise DojoCrashError(f"Unknown exit code: {exit_code}")
+            raise DojoCrashError(f"Unexpected exit code: {exit_code}")
 
     def _read_next_line(self) -> Tuple[str, str]:
         """Read the next line from `self.proc`.

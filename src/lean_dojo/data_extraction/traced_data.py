@@ -545,9 +545,9 @@ class TracedFile:
         data = json.load(json_path.open())
 
         data["module_paths"] = []
-        for line in (
-            json_path.with_suffix("").with_suffix("").with_suffix(".dep_paths").open()
-        ):
+        deps_path = json_path.with_suffix("").with_suffix("").with_suffix(".dep_paths")
+
+        for line in deps_path.open():
             line = line.strip()
             if line == "":
                 break
@@ -838,7 +838,8 @@ class TracedFile:
 
     def get_premise_definitions(self) -> List[Dict[str, Any]]:
         """Return all theorems and definitions defined in the current file that
-        can be potentially used as premises.
+        can be potentially used as premises, including the premises in the theorem
+        statement and premises in the tactics used to prove the theorem.
 
         Returns:
             List[Dict[str, Any]]: _description_
